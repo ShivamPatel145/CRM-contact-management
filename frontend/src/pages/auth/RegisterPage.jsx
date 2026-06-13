@@ -33,7 +33,7 @@ const RegisterPage = () => {
 
       if (response.data.success) {
         toast.success("Account created successfully!");
-        login(response.data.token, response.data.user);
+        login(response.data.data.token, response.data.data.user);
         navigate("/dashboard");
       }
     } catch (error) {

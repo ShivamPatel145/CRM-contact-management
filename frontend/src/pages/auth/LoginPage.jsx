@@ -34,7 +34,7 @@ const LoginPage = () => {
 
       if (response.data.success) {
         toast.success("Welcome back!");
-        login(response.data.token, response.data.user);
+        login(response.data.data.token, response.data.data.user);
         navigate("/dashboard");
       }
     } catch (error) {
