@@ -5,13 +5,13 @@ import { Link, useNavigate } from "react-router-dom";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
-import { registerSchema } from "../../../../backend/src/validators/auth.validator";
+import { registerSchema } from "../../validators/auth.validator";
 import { useAuth } from "../../context/AuthContext";
 import api from "../../lib/api";
 import { toast } from "sonner";
 import { Loader2, Layers, Mail, Lock, User as UserIcon } from "lucide-react";
 
-const clientRegisterSchema = registerSchema.shape.body;
+const clientRegisterSchema = registerSchema;
 
 const RegisterPage = () => {
   const [isLoading, setIsLoading] = useState(false);

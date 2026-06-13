@@ -5,14 +5,14 @@ import { Link, useNavigate } from "react-router-dom";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
-import { loginSchema } from "../../../../backend/src/validators/auth.validator";
+import { loginSchema } from "../../validators/auth.validator";
 import { useAuth } from "../../context/AuthContext";
 import api from "../../lib/api";
 import { toast } from "sonner";
 import { Loader2, Layers, Mail, Lock } from "lucide-react";
 
 // For frontend we just extract the body schema
-const clientLoginSchema = loginSchema.shape.body;
+const clientLoginSchema = loginSchema;
 
 const LoginPage = () => {
   const [isLoading, setIsLoading] = useState(false);
