@@ -45,16 +45,13 @@ const userSchema = new mongoose.Schema(
 );
 
 // ── Pre-save Hook: Hash password ──────────────────────────────────────────────
-userSchema.pre("save", async function (next) {
-  // Only hash when password is new or modified
-  if (!this.isModified("password")) return next();
+// NOTE: Mongoose 8.x async hooks do NOT receive a `next` callback.
+// Mongoose awaits the returned promise. Throwing an error is sufficient.
+userSchema.pre("save", async function () {
+  // Only hash when password field is new or explicitly modified
+  if (!this.isModified("password")) return;
 
-  try {
-    this.password = await bcrypt.hash(this.password, SALT_ROUNDS);
-    next();
-  } catch (error) {
-    next(error);
-  }
+  this.password = await bcrypt.hash(this.password, SALT_ROUNDS);
 });
 
 // ── Instance Method: Verify password ─────────────────────────────────────────
