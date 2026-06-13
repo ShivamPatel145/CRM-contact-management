@@ -2,8 +2,11 @@ import { Link } from "react-router-dom";
 import { ArrowRight, Layers, Users, Zap, Search, ShieldCheck, Mail, Database } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { ThemeToggle } from "../../components/theme-toggle";
+import { useAuth } from "../../context/AuthContext";
 
 const HomePage = () => {
+  const { isAuthenticated } = useAuth();
+
   return (
     <div className="flex flex-col min-h-screen bg-background selection:bg-primary/30">
       
@@ -18,14 +21,24 @@ const HomePage = () => {
           </div>
           <div className="flex items-center gap-4">
             <ThemeToggle />
-            <Link to="/login" className="text-sm font-semibold text-muted-foreground hover:text-foreground transition-colors hidden sm:inline-flex">
-              Sign In
-            </Link>
-            <Link to="/register">
-              <Button className="rounded-full px-5 h-9 bg-foreground hover:bg-foreground/90 text-background shadow-sm font-semibold text-sm transition-colors">
-                Get Started
-              </Button>
-            </Link>
+            {isAuthenticated ? (
+              <Link to="/dashboard">
+                <Button className="rounded-full px-5 h-9 bg-primary hover:bg-primary/90 text-primary-foreground shadow-sm font-semibold text-sm transition-colors">
+                  Go to Dashboard
+                </Button>
+              </Link>
+            ) : (
+              <>
+                <Link to="/login" className="text-sm font-semibold text-muted-foreground hover:text-foreground transition-colors hidden sm:inline-flex">
+                  Sign In
+                </Link>
+                <Link to="/register">
+                  <Button className="rounded-full px-5 h-9 bg-foreground hover:bg-foreground/90 text-background shadow-sm font-semibold text-sm transition-colors">
+                    Get Started
+                  </Button>
+                </Link>
+              </>
+            )}
           </div>
         </div>
       </header>
@@ -46,11 +59,19 @@ const HomePage = () => {
                Your contacts are your most valuable asset. Stop tracking them in scattered notes and bloated software. Take back control with clarity.
              </p>
              <div className="flex flex-col sm:flex-row justify-center gap-4">
-               <Link to="/register">
-                 <Button size="lg" className="w-full sm:w-auto h-14 px-8 rounded-full text-base font-semibold shadow-xl shadow-primary/20 hover:scale-[1.02] transition-transform">
-                   Start reclaiming your pipeline <ArrowRight className="ml-2 h-5 w-5" />
-                 </Button>
-               </Link>
+               {isAuthenticated ? (
+                 <Link to="/dashboard">
+                   <Button size="lg" className="w-full sm:w-auto h-14 px-8 rounded-full text-base font-semibold shadow-xl shadow-primary/20 hover:scale-[1.02] transition-transform">
+                     Go to Dashboard <ArrowRight className="ml-2 h-5 w-5" />
+                   </Button>
+                 </Link>
+               ) : (
+                 <Link to="/register">
+                   <Button size="lg" className="w-full sm:w-auto h-14 px-8 rounded-full text-base font-semibold shadow-xl shadow-primary/20 hover:scale-[1.02] transition-transform">
+                     Start reclaiming your pipeline <ArrowRight className="ml-2 h-5 w-5" />
+                   </Button>
+                 </Link>
+               )}
              </div>
           </div>
         </section>
@@ -179,9 +200,9 @@ const HomePage = () => {
                  <p className="text-slate-300 text-lg sm:text-xl mb-10 max-w-2xl mx-auto font-medium">
                    Stop letting your network decay. Create your free account today and experience the fastest way to manage your contacts.
                  </p>
-                 <Link to="/register">
+                 <Link to={isAuthenticated ? "/dashboard" : "/register"}>
                     <Button size="lg" className="rounded-full px-12 h-14 bg-primary text-primary-foreground hover:bg-primary/90 font-bold text-lg shadow-xl shadow-primary/20 transition-transform hover:scale-105">
-                      Create your free account
+                      {isAuthenticated ? "Go to Dashboard" : "Create your free account"}
                     </Button>
                  </Link>
                  <p className="mt-6 text-sm text-slate-400">No credit card required. Setup takes 30 seconds.</p>
