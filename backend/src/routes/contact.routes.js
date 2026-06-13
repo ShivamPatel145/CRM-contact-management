@@ -7,7 +7,7 @@ const {
   deleteContact,
 } = require("../controllers/contact.controller");
 const validate = require("../middleware/validate");
-const { authenticate } = require("../middleware/auth.middleware");
+const { protect } = require("../middleware/auth.middleware");
 const {
   createContactSchema,
   updateContactSchema,
@@ -17,11 +17,11 @@ const {
 const router = express.Router();
 
 // All contact routes are protected
-router.use(authenticate);
+router.use(protect);
 
 router
   .route("/")
-  .get(validate(queryContactSchema, "query"), getContacts)
+  .get(validate(queryContactSchema), getContacts)
   .post(validate(createContactSchema), createContact);
 
 router

@@ -1,6 +1,6 @@
 import { useLocation, NavLink, useNavigate } from "react-router-dom";
 import { useAuth } from "../../context/AuthContext";
-import { Menu, LogOut, Layers, Search, Plus, Bell, Download } from "lucide-react";
+import { Menu, LogOut, Layers, Search, Bell } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { ThemeToggle } from "../theme-toggle";
 import { toast } from "sonner";
@@ -17,25 +17,10 @@ import { Sheet, SheetContent, SheetTrigger, SheetTitle, SheetDescription } from 
 import { NAV_ITEMS } from "./Sidebar";
 import { Input } from "@/components/ui/input";
 
-const PAGE_TITLES = {
-  "/dashboard": "Dashboard",
-  "/contacts": "Contacts",
-  "/contacts/new": "New Contact",
-};
-
-const getPageTitle = (pathname) => {
-  if (PAGE_TITLES[pathname]) return PAGE_TITLES[pathname];
-  if (pathname.endsWith("/edit")) return "Edit Contact";
-  if (pathname.match(/^\/contacts\/[^/]+$/)) return "Contact Details";
-  return "CRM Hub";
-};
-
 const Topbar = () => {
   const { user, logout } = useAuth();
   const location = useLocation();
   const navigate = useNavigate();
-  // We can still keep the page title logic if we want, but the design shows search on the left.
-  // We will blend both: mobile menu + search on left, actions on right.
 
   const handleLogout = () => {
     logout();
@@ -93,12 +78,12 @@ const Topbar = () => {
           </SheetContent>
         </Sheet>
 
-        {/* Search Bar - matching the design */}
-        <div className="hidden sm:flex relative w-64 max-w-sm">
+        {/* Search Bar */}
+        <div className="hidden sm:flex relative w-full max-w-md">
           <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground" />
           <Input 
-            placeholder="Search" 
-            className="pl-9 h-10 bg-background border-border/60 rounded-xl focus-visible:ring-primary/20 text-sm"
+            placeholder="Search across your workspace..." 
+            className="pl-9 h-10 bg-background border-border/60 rounded-xl focus-visible:ring-primary/20 text-sm w-full"
           />
           <div className="absolute right-3 top-1/2 -translate-y-1/2 flex gap-1">
              <kbd className="inline-flex h-5 items-center gap-1 rounded border bg-muted px-1.5 font-mono text-[10px] font-medium text-muted-foreground opacity-100">
@@ -110,35 +95,22 @@ const Topbar = () => {
 
       {/* Right Actions */}
       <div className="flex items-center gap-3 md:gap-4">
-        {/* Decorative avatars representing team members like in the image */}
-        <div className="hidden lg:flex -space-x-2 mr-2">
-          <Avatar className="h-8 w-8 border-2 border-card">
-            <AvatarFallback className="bg-blue-100 text-blue-600 text-xs font-bold">JD</AvatarFallback>
-          </Avatar>
-          <Avatar className="h-8 w-8 border-2 border-card">
-            <AvatarFallback className="bg-green-100 text-green-600 text-xs font-bold">AS</AvatarFallback>
-          </Avatar>
-          <Avatar className="h-8 w-8 border-2 border-card">
-            <AvatarFallback className="bg-purple-100 text-purple-600 text-xs font-bold">MK</AvatarFallback>
-          </Avatar>
-        </div>
-
-        <Button variant="outline" size="icon" className="h-10 w-10 rounded-full border-border/60 bg-background text-foreground hover:bg-accent">
-          <Plus className="h-4 w-4" />
-        </Button>
-
+        
         <ThemeToggle />
 
-        <Button variant="outline" size="icon" className="h-10 w-10 rounded-full border-border/60 bg-background text-foreground hover:bg-accent relative">
-          <Bell className="h-4 w-4" />
-          <span className="absolute top-2 right-2.5 h-1.5 w-1.5 rounded-full bg-primary" />
-        </Button>
-
-        {/* The prominent orange Export button */}
-        <Button className="h-10 rounded-xl px-4 gap-2 font-semibold shadow-md shadow-primary/20 bg-primary hover:bg-primary/90 text-primary-foreground hidden sm:flex">
-          Export
-          <Download className="h-4 w-4" />
-        </Button>
+        {/* Notifications Dropdown */}
+        <DropdownMenu>
+          <DropdownMenuTrigger asChild>
+            <Button variant="outline" size="icon" className="h-10 w-10 rounded-full border-border/60 bg-background text-foreground hover:bg-accent relative">
+              <Bell className="h-4 w-4" />
+            </Button>
+          </DropdownMenuTrigger>
+          <DropdownMenuContent align="end" className="w-64 rounded-xl shadow-lg border-border/40 p-4 text-center">
+            <Bell className="mx-auto h-8 w-8 text-muted-foreground/50 mb-2" />
+            <p className="text-sm font-medium text-foreground">All caught up!</p>
+            <p className="text-xs text-muted-foreground mt-1">You have no new notifications.</p>
+          </DropdownMenuContent>
+        </DropdownMenu>
 
         {/* User Dropdown */}
         <DropdownMenu>

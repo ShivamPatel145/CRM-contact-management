@@ -58,8 +58,8 @@
     --popover: #fdfcfc;
     --popover-foreground: #2f3035;
 
-    /* Primary Accent (Orange) */
-    --primary: #f87941;
+    /* Primary Accent (Soft Burnt Orange) */
+    --primary: #d96b3a;
     --primary-foreground: #ffffff;
 
     /* Secondary / Soft Accents */
@@ -72,7 +72,7 @@
 
     /* Hover Accents */
     --accent: #f2f2f4; /* Subtle gray for hover */
-    --accent-foreground: #f87941;
+    --accent-foreground: #d96b3a;
 
     /* Destructive Actions */
     --destructive: #ef4444;
@@ -81,7 +81,7 @@
     /* Borders & Inputs */
     --border: #e6e4e6;
     --input: #e6e4e6;
-    --ring: #f87941;
+    --ring: #d96b3a;
 
     /* Border Radius for a soft, friendly UI */
     --radius: 0.75rem;
@@ -101,8 +101,8 @@
     --popover: #232325;
     --popover-foreground: #fdfcfc;
 
-    /* Keep the bright orange for pop */
-    --primary: #f87941;
+    /* Keep the soft orange for pop */
+    --primary: #d96b3a;
     --primary-foreground: #ffffff;
 
     /* Secondary */
@@ -115,7 +115,7 @@
 
     /* Accents */
     --accent: #2f3035;
-    --accent-foreground: #f87941;
+    --accent-foreground: #d96b3a;
 
     /* Destructive */
     --destructive: #7f1d1d;
@@ -124,7 +124,7 @@
     /* Borders */
     --border: #3f3f42;
     --input: #3f3f42;
-    --ring: #f87941;
+    --ring: #d96b3a;
   }
 }
 

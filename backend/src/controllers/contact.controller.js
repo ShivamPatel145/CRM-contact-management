@@ -8,7 +8,7 @@ const getContacts = asyncHandler(async (req, res) => {
   const { page = 1, limit = 10, status, search, sortBy = "createdAt", order = "desc" } = req.query;
 
   // Build query object
-  const query = { user: req.user.userId };
+  const query = { user: req.user._id };
 
   if (status) {
     query.status = status;
@@ -56,7 +56,7 @@ const getContacts = asyncHandler(async (req, res) => {
 const getContactById = asyncHandler(async (req, res) => {
   const contact = await Contact.findOne({
     _id: req.params.id,
-    user: req.user.userId,
+    user: req.user._id,
   });
 
   if (!contact) {
@@ -75,7 +75,7 @@ const getContactById = asyncHandler(async (req, res) => {
 // @access  Private
 const createContact = asyncHandler(async (req, res) => {
   // Add user to request body
-  const contactData = { ...req.body, user: req.user.userId };
+  const contactData = { ...req.body, user: req.user._id };
 
   const contact = await Contact.create(contactData);
 
@@ -91,7 +91,7 @@ const createContact = asyncHandler(async (req, res) => {
 const updateContact = asyncHandler(async (req, res) => {
   let contact = await Contact.findOne({
     _id: req.params.id,
-    user: req.user.userId,
+    user: req.user._id,
   });
 
   if (!contact) {
@@ -116,7 +116,7 @@ const updateContact = asyncHandler(async (req, res) => {
 const deleteContact = asyncHandler(async (req, res) => {
   const contact = await Contact.findOne({
     _id: req.params.id,
-    user: req.user.userId,
+    user: req.user._id,
   });
 
   if (!contact) {

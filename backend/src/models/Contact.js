@@ -42,6 +42,11 @@ const contactSchema = new mongoose.Schema(
       trim: true,
       maxLength: [100, "Job title cannot exceed 100 characters"],
     },
+    address: {
+      type: String,
+      trim: true,
+      maxLength: [250, "Address cannot exceed 250 characters"],
+    },
     status: {
       type: String,
       enum: ["Lead", "Active", "Inactive"],

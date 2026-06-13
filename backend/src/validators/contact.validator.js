@@ -36,6 +36,11 @@ const contactBaseSchema = {
     .max(100, "Job title cannot exceed 100 characters")
     .optional(),
 
+  address: z
+    .string()
+    .max(250, "Address cannot exceed 250 characters")
+    .optional(),
+
   status: z.enum(["Lead", "Active", "Inactive"]).optional(),
 
   tags: z.array(z.string().trim()).optional(),
@@ -46,24 +51,31 @@ const contactBaseSchema = {
     .optional(),
 };
 
-const createContactSchema = z.object(contactBaseSchema);
+// Wrap inside body: z.object({}) for validate middleware compatibility
+const createContactSchema = z.object({
+  body: z.object(contactBaseSchema),
+});
 
 // For updates, all fields become optional
-const updateContactSchema = z.object(contactBaseSchema).partial().refine(
-  (data) => Object.keys(data).length > 0,
-  {
-    message: "At least one field must be provided to update",
-  }
-);
+const updateContactSchema = z.object({
+  body: z.object(contactBaseSchema).partial().refine(
+    (data) => Object.keys(data).length > 0,
+    {
+      message: "At least one field must be provided to update",
+    }
+  ),
+});
 
 // Schema for validating list queries
 const queryContactSchema = z.object({
-  page: z.string().regex(/^\d+$/).transform(Number).optional(),
-  limit: z.string().regex(/^\d+$/).transform(Number).optional(),
-  status: z.enum(["Lead", "Active", "Inactive"]).optional(),
-  search: z.string().optional(),
-  sortBy: z.string().optional(),
-  order: z.enum(["asc", "desc"]).optional(),
+  query: z.object({
+    page: z.string().regex(/^\d+$/).transform(Number).optional(),
+    limit: z.string().regex(/^\d+$/).transform(Number).optional(),
+    status: z.enum(["Lead", "Active", "Inactive"]).or(z.literal("")).optional(),
+    search: z.string().optional(),
+    sortBy: z.string().optional(),
+    order: z.enum(["asc", "desc"]).optional(),
+  }),
 });
 
 module.exports = {
