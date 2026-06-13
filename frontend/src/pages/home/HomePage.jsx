@@ -85,11 +85,47 @@ const HomePage = () => {
                <div className="lg:w-1/2 order-2 lg:order-1">
                  <div className="relative w-full aspect-square max-w-md mx-auto">
                     {/* Abstract illustration of chaos */}
-                    <div className="absolute inset-0 bg-background border border-border/40 rounded-3xl shadow-xl flex items-center justify-center overflow-hidden rotate-[-3deg]">
-                       <div className="absolute top-10 left-10 w-48 h-12 bg-destructive/10 rounded-lg animate-pulse"></div>
-                       <div className="absolute top-32 right-10 w-32 h-12 bg-muted/50 rounded-lg"></div>
-                       <div className="absolute bottom-20 left-20 w-64 h-12 bg-amber-500/10 rounded-lg"></div>
-                       <Search className="h-16 w-16 text-muted-foreground/30 absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2" />
+                    <div className="absolute inset-0 bg-background border border-border/40 rounded-3xl shadow-xl p-6 flex flex-col justify-between overflow-hidden rotate-[-3deg]">
+                       {/* Header Row */}
+                        <div className="flex gap-2 border-b border-border/60 pb-3 text-[10px] font-bold text-muted-foreground uppercase tracking-wider">
+                          <span className="w-1/3">Name</span>
+                          <span className="w-1/3">Phone / Note</span>
+                          <span className="w-1/3 text-right">Status</span>
+                        </div>
+                        {/* Chaotic rows */}
+                        <div className="flex-1 flex flex-col gap-3.5 mt-3 text-xs">
+                          {/* Row 1: Broken data */}
+                          <div className="flex gap-2 items-center opacity-85">
+                            <span className="w-1/3 font-semibold text-foreground truncate">John R?</span>
+                            <span className="w-1/3 text-destructive font-medium line-through decoration-destructive/60 truncate">Lost number...</span>
+                            <span className="w-1/3 text-right"><span className="inline-block px-2 py-0.5 rounded bg-destructive/10 text-destructive text-[10px] font-bold">LOST DEAL</span></span>
+                          </div>
+                          {/* Row 2: Messy note */}
+                          <div className="flex gap-2 items-center opacity-70">
+                            <span className="w-1/3 font-semibold text-foreground truncate">Pamela L.</span>
+                            <span className="w-1/3 text-muted-foreground truncate">Draft email somewhere</span>
+                            <span className="w-1/3 text-right"><span className="inline-block px-2 py-0.5 rounded bg-amber-500/10 text-amber-500 text-[10px] font-bold">WARM?</span></span>
+                          </div>
+                          {/* Row 3: Missing info */}
+                          <div className="flex gap-2 items-center opacity-50">
+                            <span className="w-1/3 font-semibold text-foreground truncate">Nicholas K</span>
+                            <span className="w-1/3 text-destructive font-bold truncate">⚠️ NO EMAIL!</span>
+                            <span className="w-1/3 text-right"><span className="inline-block px-2 py-0.5 rounded bg-muted text-muted-foreground text-[10px]">UNRESPONSIVE</span></span>
+                          </div>
+                          {/* Row 4: Duplicate row */}
+                          <div className="flex gap-2 items-center opacity-30">
+                            <span className="w-1/3 font-semibold text-foreground truncate">John R?</span>
+                            <span className="w-1/3 text-muted-foreground truncate">Same person?</span>
+                            <span className="w-1/3 text-right"><span className="inline-block px-2 py-0.5 rounded bg-destructive/10 text-destructive text-[10px] font-bold">DUPLICATE</span></span>
+                          </div>
+                        </div>
+                        {/* overlay search badge */}
+                        <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 bg-background/90 border border-border/80 rounded-2xl p-4 shadow-2xl flex flex-col items-center gap-2 max-w-[180px] text-center backdrop-blur-md">
+                          <Search className="h-8 w-8 text-destructive animate-bounce" />
+                          <span className="text-xs font-semibold text-foreground">"Where is John's number?"</span>
+                          <span className="text-[10px] text-muted-foreground">Search returned 0 results</span>
+                        </div>
+
                     </div>
                     <div className="absolute -bottom-6 -right-6 w-32 h-32 bg-destructive/10 blur-2xl rounded-full"></div>
                  </div>
@@ -131,30 +167,30 @@ const HomePage = () => {
                <div className="lg:w-1/2">
                  <div className="relative w-full aspect-square max-w-md mx-auto">
                     {/* Abstract illustration of clarity */}
-                    <div className="absolute inset-0 bg-background border border-border/40 rounded-3xl shadow-xl p-6 flex flex-col gap-4 overflow-hidden rotate-[3deg]">
+                    <div className="absolute inset-0 bg-background border border-border/40 rounded-3xl shadow-xl p-6 flex flex-col justify-between overflow-hidden rotate-[3deg]">
                        <div className="flex items-center gap-4 border-b border-border/40 pb-4">
-                         <div className="h-10 w-10 rounded-full bg-primary/20"></div>
+                         <div className="h-10 w-10 rounded-full bg-emerald-500/10 flex items-center justify-center font-bold text-emerald-500 text-xs shrink-0">JR</div>
                          <div className="flex-1">
-                           <div className="h-4 w-32 bg-foreground/20 rounded mb-2"></div>
-                           <div className="h-3 w-24 bg-muted rounded"></div>
+                           <div className="text-sm font-semibold text-foreground truncate">John Richardson</div>
+                           <div className="text-xs text-muted-foreground truncate">john.richardson@example.com</div>
                          </div>
-                         <div className="h-6 w-16 bg-emerald-500/20 rounded-full"></div>
+                         <div className="px-2.5 py-0.5 rounded-full text-[10px] font-semibold bg-emerald-500/10 text-emerald-500 border border-emerald-500/20 shrink-0">Active</div>
                        </div>
                        <div className="flex items-center gap-4 border-b border-border/40 pb-4 opacity-70">
-                         <div className="h-10 w-10 rounded-full bg-primary/10"></div>
+                         <div className="h-10 w-10 rounded-full bg-amber-500/10 flex items-center justify-center font-bold text-amber-500 text-xs shrink-0">PL</div>
                          <div className="flex-1">
-                           <div className="h-4 w-40 bg-foreground/10 rounded mb-2"></div>
-                           <div className="h-3 w-20 bg-muted rounded"></div>
+                           <div className="text-sm font-semibold text-foreground truncate">Pamela Lewis</div>
+                           <div className="text-xs text-muted-foreground truncate">pamela.l@company.com</div>
                          </div>
-                         <div className="h-6 w-16 bg-amber-500/20 rounded-full"></div>
+                         <div className="px-2.5 py-0.5 rounded-full text-[10px] font-semibold bg-amber-500/10 text-amber-500 border border-amber-500/20 shrink-0">Lead</div>
                        </div>
                        <div className="flex items-center gap-4 border-b border-border/40 pb-4 opacity-40">
-                         <div className="h-10 w-10 rounded-full bg-primary/5"></div>
+                         <div className="h-10 w-10 rounded-full bg-slate-500/10 flex items-center justify-center font-bold text-slate-500 text-xs shrink-0">NK</div>
                          <div className="flex-1">
-                           <div className="h-4 w-24 bg-foreground/5 rounded mb-2"></div>
-                           <div className="h-3 w-16 bg-muted rounded"></div>
+                           <div className="text-sm font-semibold text-foreground truncate">Nicholas Kim</div>
+                           <div className="text-xs text-muted-foreground truncate">n.kim@stark.com</div>
                          </div>
-                         <div className="h-6 w-16 bg-muted rounded-full"></div>
+                         <div className="px-2.5 py-0.5 rounded-full text-[10px] font-semibold bg-slate-500/10 text-slate-500 border border-slate-500/20 shrink-0">Inactive</div>
                        </div>
                     </div>
                     <div className="absolute -bottom-6 -right-6 w-32 h-32 bg-primary/10 blur-2xl rounded-full -z-10"></div>
