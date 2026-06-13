@@ -7,27 +7,35 @@
 const mongoose = require("mongoose");
 const env = require("./env");
 
-/**
- * Connect to MongoDB Atlas.
- * Exits process on unrecoverable connection failure.
- */
+let cached = global.mongoose;
+
+if (!cached) {
+  cached = global.mongoose = { conn: null, promise: null };
+}
+
 const connectDB = async () => {
-  try {
-    const conn = await mongoose.connect(env.MONGODB_URI);
-
-    console.log(`✅  MongoDB connected: ${conn.connection.host}`);
-
-    mongoose.connection.on("error", (err) => {
-      console.error("MongoDB connection error:", err);
-    });
-
-    mongoose.connection.on("disconnected", () => {
-      console.warn("⚠️  MongoDB disconnected. Attempting to reconnect...");
-    });
-  } catch (error) {
-    console.error("❌  MongoDB connection failed:", error.message);
-    process.exit(1);
+  if (cached.conn) {
+    return cached.conn;
   }
+
+  if (!cached.promise) {
+    cached.promise = mongoose.connect(env.MONGODB_URI).then((mongoose) => {
+      console.log(`✅  MongoDB connected: ${mongoose.connection.host}`);
+      return mongoose;
+    }).catch(error => {
+      console.error("❌  MongoDB connection failed:", error.message);
+      throw error;
+    });
+  }
+
+  try {
+    cached.conn = await cached.promise;
+  } catch (e) {
+    cached.promise = null;
+    throw e;
+  }
+
+  return cached.conn;
 };
 
 module.exports = connectDB;
