@@ -33,7 +33,7 @@ import {
   AlertDialogTitle,
 } from "@/components/ui/alert-dialog";
 import { Search, Plus, MoreHorizontal, FileEdit, Trash2, Mail, Phone, Download, Building, Filter, ChevronDown, Upload, Database, Columns, Check } from "lucide-react";
-import { useContacts, useCreateContact, useUpdateContact, useDeleteContact } from "../../hooks/useContacts";
+import { useContacts, useCreateContact, useUpdateContact, useDeleteContact, useImportContacts } from "../../hooks/useContacts";
 import { ContactForm } from "./components/ContactForm";
 import { toast } from "sonner";
 
@@ -96,6 +96,7 @@ const ContactsListPage = () => {
   const { mutate: createContact, isPending: isCreating } = useCreateContact();
   const { mutate: updateContact, isPending: isUpdating } = useUpdateContact();
   const { mutate: deleteContact, isPending: isDeleting } = useDeleteContact();
+  const { mutate: importContacts, isPending: isImporting } = useImportContacts();
 
   const contacts = data?.data || [];
   const pagination = data?.pagination || {};
@@ -182,10 +183,99 @@ const ContactsListPage = () => {
 
   const handleImportCSV = (e) => {
     const file = e.target.files?.[0];
-    if (file) {
-      toast.success(`Importing ${file.name}... (Simulated)`);
-      e.target.value = null;
-    }
+    if (!file) return;
+
+    const reader = new FileReader();
+    reader.onload = async (event) => {
+      try {
+        const text = event.target.result;
+        const lines = text.split(/\r?\n/).filter(line => line.trim() !== "");
+        if (lines.length < 2) {
+          toast.error("CSV file must contain a header row and at least one contact row.");
+          return;
+        }
+
+        // Helper function to parse CSV line respecting quotes
+        const parseCSVLine = (lineStr) => {
+          const result = [];
+          let current = '';
+          let inQuotes = false;
+          for (let i = 0; i < lineStr.length; i++) {
+            const char = lineStr[i];
+            if (char === '"') {
+              inQuotes = !inQuotes;
+            } else if (char === ',' && !inQuotes) {
+              result.push(current.trim());
+              current = '';
+            } else {
+              current += char;
+            }
+          }
+          result.push(current.trim());
+          return result.map(val => val.replace(/^"|"$/g, '').replace(/""/g, '"'));
+        };
+
+        // Parse header row
+        const headers = parseCSVLine(lines[0]);
+        
+        // Build header map
+        const headerMap = {};
+        headers.forEach((header, index) => {
+          const lower = header.toLowerCase().replace(/[\s_-]+/g, "");
+          if (lower === "firstname" || lower === "first" || lower === "name") headerMap.firstName = index;
+          else if (lower === "lastname" || lower === "last") headerMap.lastName = index;
+          else if (lower === "email" || lower === "emailaddress") headerMap.email = index;
+          else if (lower === "phone" || lower === "phonenumber") headerMap.phone = index;
+          else if (lower === "company" || lower === "companyname") headerMap.company = index;
+          else if (lower === "jobtitle" || lower === "title" || lower === "job") headerMap.jobTitle = index;
+          else if (lower === "status") headerMap.status = index;
+          else if (lower === "notes" || lower === "note") headerMap.notes = index;
+        });
+
+        if (headerMap.firstName === undefined) {
+          toast.error("Could not find a 'First Name' column in the CSV.");
+          return;
+        }
+
+        // Parse data rows
+        const parsedContacts = [];
+        for (let i = 1; i < lines.length; i++) {
+          const values = parseCSVLine(lines[i]);
+          if (values.length === 0 || (values.length === 1 && values[0] === "")) continue;
+
+          const contact = {};
+          if (headerMap.firstName !== undefined) contact.firstName = values[headerMap.firstName];
+          if (headerMap.lastName !== undefined) contact.lastName = values[headerMap.lastName] || "";
+          if (headerMap.email !== undefined) contact.email = values[headerMap.email] || undefined;
+          if (headerMap.phone !== undefined) contact.phone = values[headerMap.phone] || "";
+          if (headerMap.company !== undefined) contact.company = values[headerMap.company] || "";
+          if (headerMap.jobTitle !== undefined) contact.jobTitle = values[headerMap.jobTitle] || "";
+          if (headerMap.status !== undefined) {
+            const rawStatus = values[headerMap.status];
+            contact.status = ["Lead", "Active", "Inactive"].includes(rawStatus) ? rawStatus : "Lead";
+          }
+          if (headerMap.notes !== undefined) contact.notes = values[headerMap.notes] || "";
+
+          // Ensure firstName is not empty
+          if (contact.firstName && contact.firstName.trim() !== "") {
+            parsedContacts.push(contact);
+          }
+        }
+
+        if (parsedContacts.length === 0) {
+          toast.error("No valid contact rows found in the CSV file.");
+          return;
+        }
+
+        // Execute bulk insert mutation
+        importContacts(parsedContacts);
+      } catch (err) {
+        toast.error("Failed to parse CSV file: " + err.message);
+      }
+    };
+
+    reader.readAsText(file);
+    e.target.value = null; // Reset input
   };
 
   const getStatusBadge = (status) => {

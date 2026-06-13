@@ -5,6 +5,7 @@ const {
   createContact,
   updateContact,
   deleteContact,
+  importContacts,
 } = require("../controllers/contact.controller");
 const validate = require("../middleware/validate");
 const { protect } = require("../middleware/auth.middleware");
@@ -23,6 +24,8 @@ router
   .route("/")
   .get(validate(queryContactSchema), getContacts)
   .post(validate(createContactSchema), createContact);
+
+router.post("/import", importContacts);
 
 router
   .route("/:id")

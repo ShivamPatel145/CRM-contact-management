@@ -67,6 +67,24 @@ export const useDeleteContact = () => {
   });
 };
 
+export const useImportContacts = () => {
+  const queryClient = useQueryClient();
+
+  return useMutation({
+    mutationFn: async (contacts) => {
+      const response = await api.post("/contacts/import", { contacts });
+      return response.data;
+    },
+    onSuccess: (data) => {
+      queryClient.invalidateQueries({ queryKey: ["contacts"] });
+      toast.success(data.message || "Contacts imported successfully");
+    },
+    onError: (error) => {
+      toast.error(error.response?.data?.message || "Failed to import contacts");
+    },
+  });
+};
+
 // ── Dashboard Hooks ──
 export const useDashboardStats = () => {
   return useQuery({
