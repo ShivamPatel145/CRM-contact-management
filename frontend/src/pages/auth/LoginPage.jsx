@@ -5,13 +5,14 @@ import { Link, useNavigate } from "react-router-dom";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
-import { loginSchema as clientLoginSchema } from "../../validators/auth.validator";
+import { loginSchema } from "../../../../backend/src/validators/auth.validator";
 import { useAuth } from "../../context/AuthContext";
 import api from "../../lib/api";
 import { toast } from "sonner";
 import { Loader2, Layers, Mail, Lock } from "lucide-react";
 
-// Using the local client schema directly
+// For frontend we just extract the body schema
+const clientLoginSchema = loginSchema.shape.body;
 
 const LoginPage = () => {
   const [isLoading, setIsLoading] = useState(false);
@@ -123,51 +124,17 @@ const LoginPage = () => {
         </div>
       </div>
 
-      {/* ── Right Side: Custom UI Composition ── */}
-      <div className="hidden lg:flex flex-1 relative bg-muted/20 border-l border-border/40 overflow-hidden items-center justify-center">
-        {/* Soft Background Blurs */}
-        <div className="absolute top-1/4 left-1/4 w-96 h-96 bg-primary/10 rounded-full blur-3xl pointer-events-none"></div>
-        <div className="absolute bottom-1/4 right-1/4 w-64 h-64 bg-emerald-500/10 rounded-full blur-3xl pointer-events-none"></div>
-        
-        {/* Mock UI Composition */}
-        <div className="relative w-full max-w-[500px] h-[500px]">
-           {/* Back Card */}
-           <div className="absolute top-12 right-8 w-64 h-48 rounded-2xl bg-background/60 border border-border/50 shadow-xl backdrop-blur-md p-6 rotate-[6deg]">
-             <div className="flex items-center gap-3 mb-4 opacity-50">
-               <div className="h-8 w-8 rounded-full bg-primary/20"></div>
-               <div className="space-y-1.5 flex-1">
-                 <div className="h-3 w-20 bg-muted rounded"></div>
-                 <div className="h-2 w-16 bg-muted-foreground/30 rounded"></div>
+      {/* ── Right Side: Promotional/Brand Image ── */}
+      <div className="hidden lg:flex flex-1 relative bg-muted/30 border-l border-border/40 overflow-hidden">
+        <div className="absolute inset-0 bg-[linear-gradient(to_right,#80808012_1px,transparent_1px),linear-gradient(to_bottom,#80808012_1px,transparent_1px)] bg-[size:24px_24px]"></div>
+        <div className="absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 w-full max-w-lg p-12">
+            <div className="relative rounded-3xl bg-background border border-border/50 shadow-2xl p-8 backdrop-blur-xl">
+               <div className="h-12 w-12 rounded-xl bg-primary/10 flex items-center justify-center mb-6">
+                  <Layers className="h-6 w-6 text-primary" />
                </div>
-             </div>
-             <div className="space-y-3">
-               <div className="h-2 w-full bg-muted rounded"></div>
-               <div className="h-2 w-4/5 bg-muted rounded"></div>
-             </div>
-           </div>
-
-           {/* Main Front Card */}
-           <div className="absolute bottom-12 left-8 w-80 h-72 rounded-3xl bg-background/90 border border-border shadow-2xl backdrop-blur-xl p-8 z-10 flex flex-col justify-between">
-              <div>
-                <div className="h-12 w-12 rounded-xl bg-primary/10 flex items-center justify-center mb-6 border border-primary/20">
-                   <Layers className="h-6 w-6 text-primary" />
-                </div>
-                <h3 className="text-2xl font-bold text-foreground mb-3 leading-tight">Clarity drives <br/> performance.</h3>
-                <p className="text-muted-foreground font-medium text-sm leading-relaxed">
-                  Join thousands of professionals using Veselty to close deals faster.
-                </p>
-              </div>
-              <div className="flex items-center gap-2 mt-6">
-                 {[...Array(3)].map((_, i) => (
-                   <div key={i} className="h-8 w-8 rounded-full border-2 border-background bg-primary/20 -ml-2 first:ml-0 flex items-center justify-center">
-                     <div className="h-4 w-4 rounded-full bg-primary/40"></div>
-                   </div>
-                 ))}
-                 <div className="h-8 w-8 rounded-full border-2 border-background bg-muted -ml-2 flex items-center justify-center text-[10px] font-bold text-muted-foreground">
-                   +1k
-                 </div>
-              </div>
-           </div>
+               <h3 className="text-2xl font-bold text-foreground mb-4">"Veselty has completely transformed how our sales team operates."</h3>
+               <p className="text-muted-foreground font-medium text-sm">Join the platform that helps you close more deals, faster.</p>
+            </div>
         </div>
       </div>
 

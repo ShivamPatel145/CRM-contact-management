@@ -13,6 +13,13 @@ import {
   SheetHeader,
   SheetTitle,
 } from "@/components/ui/sheet";
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuTrigger,
+} from "@/components/ui/dropdown-menu";
+import { ChevronDown } from "lucide-react";
 
 // Basic Zod schema matching the backend requirements
 const contactSchema = z.object({
@@ -33,6 +40,8 @@ export function ContactForm({ open, onOpenChange, initialData, onSubmit, isLoadi
     register,
     handleSubmit,
     reset,
+    watch,
+    setValue,
     formState: { errors },
   } = useForm({
     resolver: zodResolver(contactSchema),
@@ -135,15 +144,19 @@ export function ContactForm({ open, onOpenChange, initialData, onSubmit, isLoadi
 
           <div className="space-y-2">
             <Label htmlFor="status">Status</Label>
-            <select
-              id="status"
-              className="flex h-10 w-full rounded-xl border border-input bg-background px-3 py-2 text-sm ring-offset-background file:border-0 file:bg-transparent file:text-sm file:font-medium placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50"
-              {...register("status")}
-            >
-              <option value="Lead">Lead</option>
-              <option value="Active">Active</option>
-              <option value="Inactive">Inactive</option>
-            </select>
+            <DropdownMenu>
+              <DropdownMenuTrigger asChild>
+                <Button variant="outline" className="w-full justify-between h-10 font-normal rounded-xl border-border/60">
+                  {watch("status") || "Select Status"}
+                  <ChevronDown className="h-4 w-4 opacity-50" />
+                </Button>
+              </DropdownMenuTrigger>
+              <DropdownMenuContent className="w-[--radix-dropdown-menu-trigger-width] rounded-xl">
+                <DropdownMenuItem onClick={() => setValue("status", "Lead")}>Lead</DropdownMenuItem>
+                <DropdownMenuItem onClick={() => setValue("status", "Active")}>Active</DropdownMenuItem>
+                <DropdownMenuItem onClick={() => setValue("status", "Inactive")}>Inactive</DropdownMenuItem>
+              </DropdownMenuContent>
+            </DropdownMenu>
           </div>
 
           <div className="pt-4 flex justify-end gap-3">

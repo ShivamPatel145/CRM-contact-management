@@ -66,3 +66,14 @@ export const useDeleteContact = () => {
     },
   });
 };
+
+// ── Dashboard Hooks ──
+export const useDashboardStats = () => {
+  return useQuery({
+    queryKey: ["dashboardStats"],
+    queryFn: async () => {
+      const { data } = await api.get("/dashboard/stats");
+      return data.data; // Return the inner data object
+    },
+  });
+};

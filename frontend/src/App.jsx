@@ -11,6 +11,7 @@ const LoginPage = lazy(() => import("./pages/auth/LoginPage"));
 const RegisterPage = lazy(() => import("./pages/auth/RegisterPage"));
 const DashboardPage = lazy(() => import("./pages/dashboard/DashboardPage"));
 const ContactsListPage = lazy(() => import("./pages/contacts/ContactsListPage"));
+const SettingsPage = lazy(() => import("./pages/settings/SettingsPage"));
 
 // QueryClient for TanStack Query
 const queryClient = new QueryClient({
@@ -24,7 +25,7 @@ const queryClient = new QueryClient({
 
 // Simple full-screen loader for Suspense fallback
 const FullScreenLoader = () => (
-  <div className="min-h-screen flex items-center justify-center bg-background">
+  <div className="min-h-[100dvh] flex items-center justify-center bg-background">
     <div className="animate-spin rounded-full h-12 w-12 border-t-2 border-b-2 border-primary"></div>
   </div>
 );
@@ -102,6 +103,14 @@ function App() {
                   element={
                     <ProtectedRoute>
                       <ContactsListPage />
+                    </ProtectedRoute>
+                  }
+                />
+                <Route
+                  path="/settings"
+                  element={
+                    <ProtectedRoute>
+                      <SettingsPage />
                     </ProtectedRoute>
                   }
                 />

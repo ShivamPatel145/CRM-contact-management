@@ -1,6 +1,6 @@
 import { useLocation, NavLink, useNavigate } from "react-router-dom";
 import { useAuth } from "../../context/AuthContext";
-import { Menu, LogOut, Layers, Search, Bell } from "lucide-react";
+import { Menu, LogOut, Layers, Search, Bell, ChevronRight } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { ThemeToggle } from "../theme-toggle";
 import { toast } from "sonner";
@@ -15,12 +15,14 @@ import {
 import { Avatar, AvatarFallback } from "@/components/ui/avatar";
 import { Sheet, SheetContent, SheetTrigger, SheetTitle, SheetDescription } from "@/components/ui/sheet";
 import { NAV_ITEMS } from "./Sidebar";
+import { useState } from "react";
 import { Input } from "@/components/ui/input";
 
 const Topbar = () => {
   const { user, logout } = useAuth();
   const location = useLocation();
   const navigate = useNavigate();
+  const [searchQuery, setSearchQuery] = useState("");
 
   const handleLogout = () => {
     logout();
@@ -78,23 +80,16 @@ const Topbar = () => {
           </SheetContent>
         </Sheet>
 
-        {/* Search Bar */}
-        <div className="hidden sm:flex relative w-full max-w-md">
-          <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground" />
-          <Input 
-            placeholder="Search across your workspace..." 
-            className="pl-9 h-10 bg-background border-border/60 rounded-xl focus-visible:ring-primary/20 text-sm w-full"
-          />
-          <div className="absolute right-3 top-1/2 -translate-y-1/2 flex gap-1">
-             <kbd className="inline-flex h-5 items-center gap-1 rounded border bg-muted px-1.5 font-mono text-[10px] font-medium text-muted-foreground opacity-100">
-                <span className="text-xs">⌘</span>F
-             </kbd>
-          </div>
+        {/* Breadcrumbs for Professional Look */}
+        <div className="hidden sm:flex items-center gap-2 text-sm text-muted-foreground font-medium pl-4">
+           <span>CRM Hub</span>
+           <ChevronRight className="h-4 w-4 text-muted-foreground/50" />
+           <span className="text-foreground capitalize">{location.pathname.substring(1) || "Dashboard"}</span>
         </div>
       </div>
 
       {/* Right Actions */}
-      <div className="flex items-center gap-3 md:gap-4">
+      <div className="flex items-center gap-4">
         
         <ThemeToggle />
 
@@ -114,9 +109,9 @@ const Topbar = () => {
 
         {/* User Dropdown */}
         <DropdownMenu>
-          <DropdownMenuTrigger className="rounded-full outline-none focus-visible:ring-2 focus-visible:ring-primary ring-offset-2 ring-offset-background transition-transform hover:scale-105 active:scale-95 ml-1">
-            <Avatar className="h-10 w-10 border-2 border-primary/20">
-              <AvatarFallback className="bg-secondary text-foreground font-semibold">
+          <DropdownMenuTrigger className="rounded-full outline-none focus-visible:ring-2 focus-visible:ring-[#f3a886] ring-offset-2 ring-offset-background transition-transform hover:scale-105 active:scale-95 ml-1">
+            <Avatar className="h-10 w-10 border border-border/40 shadow-sm">
+              <AvatarFallback className="bg-[#f3a886] text-slate-900 font-semibold dark:bg-[#d68560] dark:text-slate-900">
                 {user?.name?.charAt(0).toUpperCase() || "U"}
               </AvatarFallback>
             </Avatar>
