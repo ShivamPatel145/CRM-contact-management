@@ -1,25 +1,20 @@
-/**
- * @file Sidebar.jsx
- * @description Left navigation sidebar.
- *
- * Features:
- * - CRM logo/brand mark
- * - Navigation links (Dashboard, Contacts)
- * - Active link highlighting via NavLink
- * - Logout button at bottom
- */
-
 import { NavLink, useNavigate } from "react-router-dom";
 import {
   LayoutDashboard,
   Users,
   LogOut,
   Layers,
+  Settings,
+  MessageSquare,
+  Box,
+  ShoppingCart
 } from "lucide-react";
 import { useAuth } from "../../context/AuthContext";
 import { toast } from "sonner";
+import { Button } from "@/components/ui/button";
+import { Avatar, AvatarFallback } from "@/components/ui/avatar";
 
-const NAV_ITEMS = [
+export const NAV_ITEMS = [
   {
     label: "Dashboard",
     to: "/dashboard",
@@ -43,63 +38,22 @@ const Sidebar = () => {
   };
 
   return (
-    <aside className="sidebar">
+    <aside className="hidden md:flex flex-col w-[260px] bg-card rounded-2xl border border-border/40 shadow-sm shrink-0 sticky top-4 h-[calc(100vh-2rem)] overflow-hidden">
       {/* ── Brand ──────────────────────────────────────────────────────────── */}
-      <div
-        style={{
-          padding: "1.25rem 1rem",
-          borderBottom: "1px solid rgba(255,255,255,0.06)",
-          display: "flex",
-          alignItems: "center",
-          gap: "0.625rem",
-        }}
-      >
-        <div
-          style={{
-            width: "2rem",
-            height: "2rem",
-            borderRadius: "0.5rem",
-            background: "linear-gradient(135deg, #2563eb, #7c3aed)",
-            display: "flex",
-            alignItems: "center",
-            justifyContent: "center",
-            flexShrink: 0,
-          }}
-        >
-          <Layers size={16} color="white" />
+      <div className="flex h-16 items-center px-6 gap-3 mb-2 pt-6">
+        <div className="flex h-10 w-10 items-center justify-center rounded-xl bg-[#2f3035] shadow-sm">
+          <Layers size={20} className="text-white" />
         </div>
-        <div>
-          <div
-            style={{
-              color: "white",
-              fontWeight: 700,
-              fontSize: "0.9375rem",
-              letterSpacing: "-0.01em",
-              lineHeight: 1.2,
-            }}
-          >
-            CRM Hub
-          </div>
-          <div style={{ color: "#64748b", fontSize: "0.6875rem", lineHeight: 1 }}>
-            Contact Manager
-          </div>
+        <div className="flex flex-col">
+          <span className="font-bold text-[16px] text-foreground leading-tight tracking-tight">CRM Hub</span>
+          <span className="text-[11px] text-muted-foreground font-medium">Workspace</span>
         </div>
       </div>
 
       {/* ── Navigation ─────────────────────────────────────────────────────── */}
-      <nav style={{ flex: 1, padding: "0.75rem 0.625rem", overflowY: "auto" }}>
-        <div
-          style={{
-            fontSize: "0.6875rem",
-            fontWeight: 600,
-            textTransform: "uppercase",
-            letterSpacing: "0.08em",
-            color: "#334155",
-            padding: "0 0.375rem",
-            marginBottom: "0.375rem",
-          }}
-        >
-          Menu
+      <nav className="flex-1 overflow-y-auto py-4 px-4 space-y-1">
+        <div className="px-2 mb-3 text-[10px] font-bold uppercase tracking-widest text-muted-foreground">
+          Main Menu
         </div>
 
         {NAV_ITEMS.map((item) => {
@@ -109,76 +63,52 @@ const Sidebar = () => {
               key={item.to}
               to={item.to}
               className={({ isActive }) =>
-                `sidebar-nav-item${isActive ? " active" : ""}`
+                `group flex items-center gap-3 rounded-xl px-3 py-2.5 text-[14px] font-medium transition-all duration-200 ${
+                  isActive
+                    ? "bg-secondary text-foreground shadow-sm relative overflow-hidden"
+                    : "text-foreground hover:bg-accent"
+                }`
               }
             >
-              <Icon size={17} />
-              <span>{item.label}</span>
+              {({ isActive }) => (
+                <>
+                  {/* Left accent bar for active item */}
+                  {isActive && <div className="absolute left-0 top-0 bottom-0 w-1 bg-primary rounded-r-md" />}
+                  <Icon size={18} className={isActive ? "text-primary" : "text-muted-foreground group-hover:text-foreground transition-colors"} />
+                  {item.label}
+                </>
+              )}
             </NavLink>
           );
         })}
       </nav>
 
       {/* ── User + Logout ───────────────────────────────────────────────────── */}
-      <div
-        style={{
-          padding: "0.75rem 0.625rem",
-          borderTop: "1px solid rgba(255,255,255,0.06)",
-        }}
-      >
-        {/* User info */}
-        <div
-          style={{
-            display: "flex",
-            alignItems: "center",
-            gap: "0.625rem",
-            padding: "0.5rem 0.625rem",
-            marginBottom: "0.25rem",
-          }}
-        >
-          <div
-            className="avatar avatar-sm"
-            style={{ background: "linear-gradient(135deg, #2563eb, #7c3aed)" }}
-          >
-            {user?.name?.charAt(0).toUpperCase() || "U"}
-          </div>
-          <div style={{ overflow: "hidden" }}>
-            <div
-              style={{
-                color: "#e2e8f0",
-                fontSize: "0.8125rem",
-                fontWeight: 500,
-                whiteSpace: "nowrap",
-                overflow: "hidden",
-                textOverflow: "ellipsis",
-              }}
-            >
+      <div className="p-4 mt-auto">
+        <div className="flex items-center gap-3 px-3 py-3 mb-2 rounded-xl bg-accent border border-border/30">
+          <Avatar className="h-9 w-9 shadow-sm">
+            <AvatarFallback className="bg-primary text-white font-medium">
+              {user?.name?.charAt(0).toUpperCase() || "U"}
+            </AvatarFallback>
+          </Avatar>
+          <div className="flex flex-col overflow-hidden">
+            <span className="text-sm font-semibold text-foreground truncate">
               {user?.name || "User"}
-            </div>
-            <div
-              style={{
-                color: "#475569",
-                fontSize: "0.6875rem",
-                whiteSpace: "nowrap",
-                overflow: "hidden",
-                textOverflow: "ellipsis",
-              }}
-            >
+            </span>
+            <span className="text-[11px] text-muted-foreground truncate font-medium">
               {user?.email || ""}
-            </div>
+            </span>
           </div>
         </div>
 
-        {/* Logout */}
-        <button
+        <Button
+          variant="ghost"
+          className="w-full justify-start text-muted-foreground hover:text-destructive hover:bg-destructive/10 rounded-xl font-medium transition-colors"
           onClick={handleLogout}
-          className="sidebar-nav-item"
-          style={{ color: "#ef4444" }}
-          id="sidebar-logout-btn"
         >
-          <LogOut size={17} />
-          <span>Log out</span>
-        </button>
+          <LogOut className="mr-2 h-4 w-4" />
+          Log out
+        </Button>
       </div>
     </aside>
   );

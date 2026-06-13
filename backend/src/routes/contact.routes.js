@@ -1,14 +1,33 @@
-/**
- * @file contact.routes.js
- * @description Contact CRUD routes — implemented in Milestone 3.
- * Placeholder to prevent require() error during Milestone 1 setup.
- */
-
 const express = require("express");
+const {
+  getContacts,
+  getContactById,
+  createContact,
+  updateContact,
+  deleteContact,
+} = require("../controllers/contact.controller");
+const validate = require("../middleware/validate");
+const { authenticate } = require("../middleware/auth.middleware");
+const {
+  createContactSchema,
+  updateContactSchema,
+  queryContactSchema,
+} = require("../validators/contact.validator");
+
 const router = express.Router();
 
-router.get("/ping", (req, res) => {
-  res.json({ success: true, message: "Contact routes active" });
-});
+// All contact routes are protected
+router.use(authenticate);
+
+router
+  .route("/")
+  .get(validate(queryContactSchema, "query"), getContacts)
+  .post(validate(createContactSchema), createContact);
+
+router
+  .route("/:id")
+  .get(getContactById)
+  .put(validate(updateContactSchema), updateContact)
+  .delete(deleteContact);
 
 module.exports = router;

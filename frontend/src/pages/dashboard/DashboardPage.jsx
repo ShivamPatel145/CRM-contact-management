@@ -1,42 +1,16 @@
-/**
- * @file DashboardPage.jsx
- * @description Dashboard page stub with AppLayout.
- * Full analytics implementation comes in Milestone 6.
- */
-
 import AppLayout from "../../layouts/AppLayout";
+import { LayoutDashboard } from "lucide-react";
 
 const DashboardPage = () => {
   return (
     <AppLayout>
-      <div
-        style={{
-          display: "flex",
-          flexDirection: "column",
-          alignItems: "center",
-          justifyContent: "center",
-          minHeight: "60vh",
-          textAlign: "center",
-        }}
-      >
-        <div
-          style={{
-            width: "4rem",
-            height: "4rem",
-            borderRadius: "50%",
-            background: "var(--color-primary-light)",
-            display: "flex",
-            alignItems: "center",
-            justifyContent: "center",
-            marginBottom: "1.25rem",
-            fontSize: "1.5rem",
-          }}
-        >
-          📊
+      <div className="flex flex-col items-center justify-center min-h-[60vh] text-center w-full">
+        <div className="flex h-16 w-16 items-center justify-center rounded-full bg-primary/10 mb-5">
+          <LayoutDashboard className="h-8 w-8 text-primary" />
         </div>
-        <h2 style={{ marginBottom: "0.5rem" }}>Dashboard Analytics</h2>
-        <p style={{ color: "var(--color-text-muted)" }}>
-          Full analytics coming in Milestone 6
+        <h2 className="text-2xl font-semibold tracking-tight mb-2">Dashboard Analytics</h2>
+        <p className="text-muted-foreground max-w-[500px]">
+          Full analytics coming in Milestone 6. The UI has been overhauled with shadcn/ui.
         </p>
       </div>
     </AppLayout>
