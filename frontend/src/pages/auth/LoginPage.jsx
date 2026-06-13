@@ -81,6 +81,7 @@ const LoginPage = () => {
                     id="email"
                     type="email"
                     placeholder="name@company.com"
+                    autoComplete="email"
                     {...register("email")}
                     className="pl-10 h-12 rounded-xl border-border/60 bg-background/50 focus:bg-background transition-colors"
                   />
@@ -103,6 +104,7 @@ const LoginPage = () => {
                     id="password"
                     type="password"
                     placeholder="••••••••"
+                    autoComplete="current-password"
                     {...register("password")}
                     className="pl-10 h-12 rounded-xl border-border/60 bg-background/50 focus:bg-background transition-colors"
                   />

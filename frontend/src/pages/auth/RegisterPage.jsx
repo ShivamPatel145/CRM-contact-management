@@ -79,6 +79,7 @@ const RegisterPage = () => {
                   <Input
                     id="name"
                     placeholder="John Doe"
+                    autoComplete="name"
                     {...register("name")}
                     className="pl-10 h-12 rounded-xl border-border/60 bg-background/50 focus:bg-background transition-colors"
                   />
@@ -96,6 +97,7 @@ const RegisterPage = () => {
                     id="email"
                     type="email"
                     placeholder="name@company.com"
+                    autoComplete="email"
                     {...register("email")}
                     className="pl-10 h-12 rounded-xl border-border/60 bg-background/50 focus:bg-background transition-colors"
                   />
@@ -113,6 +115,7 @@ const RegisterPage = () => {
                     id="password"
                     type="password"
                     placeholder="••••••••"
+                    autoComplete="new-password"
                     {...register("password")}
                     className="pl-10 h-12 rounded-xl border-border/60 bg-background/50 focus:bg-background transition-colors"
                   />
