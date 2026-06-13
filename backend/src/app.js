@@ -78,20 +78,23 @@ if (env.NODE_ENV === "development") {
 app.use(express.json({ limit: "10kb" })); // Reject payloads > 10kb
 app.use(express.urlencoded({ extended: true, limit: "10kb" }));
 
-// ── Health Check ──────────────────────────────────────────────────────────────
-app.get("/api/health", (req, res) => {
+// ── API Routes ────────────────────────────────────────────────────────────────
+const apiRouter = express.Router();
+
+apiRouter.get("/health", (req, res) => {
   res.json({ success: true, message: "CRM API is running", version: "1.0.0" });
 });
 
-// ── API Routes ────────────────────────────────────────────────────────────────
-// Routes will be mounted here in subsequent milestones
 const authRoutes = require("./routes/auth.routes");
 const contactRoutes = require("./routes/contact.routes");
 const dashboardRoutes = require("./routes/dashboard.routes");
 
-app.use("/api/auth", authLimiter, authRoutes);
-app.use("/api/contacts", contactRoutes);
-app.use("/api/dashboard", dashboardRoutes);
+apiRouter.use("/auth", authLimiter, authRoutes);
+apiRouter.use("/contacts", contactRoutes);
+apiRouter.use("/dashboard", dashboardRoutes);
+
+// Mount router on both /api (local dev) and / (Vercel)
+app.use(["/api", "/"], apiRouter);
 
 // ── Error Handling ────────────────────────────────────────────────────────────
 app.use(notFound);
